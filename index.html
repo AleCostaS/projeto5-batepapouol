@@ -9,8 +9,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="inicial">
+        <img src="imagens/logo2.png" >
+
+        <input type="text" placeholder="Digite o seu nome">
+
+        <div onclick="nome()">Entrar</div>
+    </div>
+
     <div class="topo">
-        <img src="imagens/logo 1.png" >
+        <img src="imagens/logo1.png" >
         <ion-icon name="people"></ion-icon>
     </div>
 
@@ -35,12 +43,14 @@
     </div>
 
     <div class="digitar">
-        <p>olá</p>
+        <input type="text" placeholder="Digite sua mensagem">
 
-        <ion-icon name="send-outline"></ion-icon>
+        <ion-icon name="send-outline" onclick="enviarMensagem()"></ion-icon>
     </div>
 
-    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

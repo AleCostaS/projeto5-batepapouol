@@ -1,8 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
+
 body {
     background-color: rgb(34, 34, 34);
+    font-family: 'Roboto', sans-serif;
 
     display: flex;
     justify-content: center;
+}
+
+.inicial {
+    background-color: #FFFFFF;
+    width: 614px;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    z-index: 1;
+    position: fixed;
+    top: 0;
+}
+
+.inicial img {
+    margin-top: 72px;
+    width: 230px;
+    height: 162px;
+}
+
+.inicial input {
+    margin-top: 150px;
+    width: 361px;
+    height: 84px;
+    border: 1px solid #D7D7D7;
+    border-radius: 4px;
+    font-size: 30px;
+    text-align: center;
+}
+
+::placeholder {
+    color: #D7D7D7;
+}
+
+.inicial div {
+    margin-top: 20px;
+    width: 149px;
+    height: 65px;
+    background: #E7E7E7;
+    border-radius: 9px;
+    color: #696969;
+    font-size: 30px;
+
+    display: flex;
+    align-items:  center;
+    justify-content: center;
+}
+
+.escondida {
+    display: none;
 }
 
 .topo {
@@ -64,3 +119,12 @@ body {
     bottom: 0;
 }
 
+input {
+    width: 500px;
+    height: 78px;
+    border: 0;
+}
+
+input, textarea, select {
+    outline: 0;
+}
