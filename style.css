@@ -84,8 +84,8 @@ body {
 .conteudo {
     background-color: #E5E5E5;
     width: 614px;
-    height: 2000px;
-    padding-top: 110px;
+    height: 100%;
+    padding: 110px 0;
 }
 
 .mensagem {

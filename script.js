@@ -1,56 +1,52 @@
 const resposta = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
-let mensagens = [];
-let nomeValido = false;
 
-resposta.then(processaResposta);
 
-function processaResposta(){
-    mensagens = resposta.data;
-    renderizarMensagens();
-}
+resposta.then(renderizarMensagens);
 
-//resposta.catch(tratarErro);
+resposta.catch(retornarErro);
 
-function nomeErro(erro){
+function retornarErro(erro){
     console.log("Status code: " + erro.response.status);
 	console.log("Mensagem de erro: " + erro.response.data);
-    if (erro.response.status == 400){
-        alert("o nome já foi usado, por favor digite outro nome");
-    } else if (erro.response.status == 200){
-        nomeValido = true;
-    }
 }
 
-function renderizarMensagens(){
+function renderizarMensagens(resoposta){
     const ul = document.querySelector(".conteudo");
 
-    for (let i = 0; i < mensagens.length; i++){
-        ul.innerHTML += `<li class="mensagem">
-            <span class="time">${mensagens[i].time}</span>
-            <span class="name">${mensagens[i].to}</span>
-            <span class="message">${mensagens[i].text}</span>
+    for (let i = 0; i < (resoposta.data).length; i++){
+        ul.innerHTML += 
+        `<li class="mensagem">
+            <span class="time">${resoposta.data[i].time}</span>
+            <span class="name">${resoposta.data[i].to}</span>
+            <span class="message">${resoposta.data[i].text}</span>
         </li>`
+
+        i++;
+        let filha = document.querySelector(".conteudo :nth-child("+i+")")
+        console.log(filha)
+        i--;
+        
+        if (resoposta.data[i].type == "status"){
+            filha.classList.add("system")
+        } else if (resoposta.data[i].type == "private_message"){
+            filha.classList.add("private")
+        }
     }
 }
 
-function enviarMensagem(){
-
+function mudarPagina(){
+    const inicial = document.querySelector(".inicial");
+    inicial.classList.add("escondida");
 }
 
 function nome(){
     const input = document.querySelector(".inicial input");
     if (input.value != ""){
-        const nome = `{
-            name: "${input.value}"
-          }`
+        const nome = 
+            {
+                name: input.value
+            }
 
-        const requisicao = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants" , nome);
-
-        requisicao.catch(nomeErro);
-        
-        if(nomeValido){
-            const inicial = document.querySelector(".inicial");
-            inicial.classList.add("escondida");
-        }
+        const requisicao = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants" , nome).then(mudarPagina).catch(retornarErro);
     }
 }
