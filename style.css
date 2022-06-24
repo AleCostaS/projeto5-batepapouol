@@ -3,7 +3,6 @@
 body {
     background-color: rgb(34, 34, 34);
     font-family: 'Roboto', sans-serif;
-    overflow: hidden;
     word-break: break-all;
 
     display: flex;
@@ -147,13 +146,46 @@ input {
     z-index: 1;
     position: fixed;
     top: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.voltar {
+    width: 200px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.menulateral {
+    display: block;
+    overflow: auto;
 }
 
 .visivel {
+    opacity: 100%;
     width: 614px;
     height: 100%;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.6);
+    transition: all 2s;
+}
+
+.invisivel {
+    width: 614px;
+    height: 100%;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0);
+    transition: all 2s;
+}
+
+.invisivel .menulateral{
+    width: 414px;
+    height: 100%;
+    right:  0;
+    position: absolute;
+    transform:  translate(414px, 0);
     transition: all 2s;
 }
 
@@ -191,3 +223,4 @@ p  {
     font-weight: 400;
     font-size: 24px;
 }
+
