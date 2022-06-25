@@ -72,9 +72,10 @@ function menuLateral(){
 }
 
 function renderizarUsuarios(resposta){
-    const menuLateral = document.querySelector(".menulateral")
+    const menuLateral = document.querySelector(".menulateral");
     let usuarioEscolhido = document.querySelector(".selecionado :nth-child(2)");
-
+    let visibilidadeEscolhida = document.querySelector(".selecionadoVisibilidade :nth-child(2)");
+    console.log(visibilidadeEscolhida)
     if (usuarioEscolhido == null){ 
         menuLateral.innerHTML = `
         <p><strong>Escolha um contato para enviar mensagem:</strong></p>
@@ -117,20 +118,50 @@ function renderizarUsuarios(resposta){
             </div>`
         }
     }
-
-    menuLateral.innerHTML += `
-    <p><strong>Escolha a visibilidade:</strong></p>
-    <div class="visibilidade selecionadoVisibilidade">
-        <div class="icone"><ion-icon name="lock-open"></ion-icon> </div>
-        <div class="nomeUsuarios">Público</div>
-        <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
-    </div>
-    <div class="visibilidade">
-        <div class="icone"><ion-icon name="lock-closed"></ion-icon> </div>
-        <div class="nomeUsuarios">Reservadamente</div>
-        <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
-    </div>`
-
+      
+    if (visibilidadeEscolhida == null){
+        menuLateral.innerHTML += `
+        <p><strong>Escolha a visibilidade:</strong></p>
+        <div class="visibilidade selecionadoVisibilidade" onclick="selecionarVisibilidade(this)">
+            <div class="icone"><ion-icon name="lock-open"></ion-icon> </div>
+            <div class="nomeUsuarios">Público</div>
+            <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
+        </div>
+        <div class="visibilidade" onclick="selecionarVisibilidade(this)">
+            <div class="icone"><ion-icon name="lock-closed"></ion-icon> </div>
+            <div class="nomeUsuarios">Reservadamente</div>
+            <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
+        </div>`
+    } else {
+        if (visibilidadeEscolhida.innerHTML == "Público"){
+            menuLateral.innerHTML += `
+            <p><strong>Escolha a visibilidade:</strong></p>
+            <div class="visibilidade selecionadoVisibilidade" onclick="selecionarVisibilidade(this)">
+                <div class="icone"><ion-icon name="lock-open"></ion-icon> </div>
+                <div class="nomeUsuarios">Público</div>
+                <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
+            </div>
+            <div class="visibilidade" onclick="selecionarVisibilidade(this)">
+                <div class="icone"><ion-icon name="lock-closed"></ion-icon> </div>
+                <div class="nomeUsuarios">Reservadamente</div>
+                <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
+            </div>`
+        } else {
+            menuLateral.innerHTML += `
+            <p><strong>Escolha a visibilidade:</strong></p>
+            <div class="visibilidade" onclick="selecionarVisibilidade(this)">
+                <div class="icone"><ion-icon name="lock-open"></ion-icon> </div>
+                <div class="nomeUsuarios">Público</div>
+                <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
+            </div>
+            <div class="visibilidade  selecionadoVisibilidade" onclick="selecionarVisibilidade(this)">
+                <div class="icone"><ion-icon name="lock-closed"></ion-icon> </div>
+                <div class="nomeUsuarios">Reservadamente</div>
+                <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
+            </div>`
+        }
+       
+    }
 }
 
 function atualizarStatus(){ 
@@ -166,14 +197,22 @@ function escondendoMenuLateral() {
     menu.classList.remove("invisivel");
      
 }
+
 function selecionarUsuario(elemento){
     const selecionado = document.querySelector(".selecionado");
     selecionado.classList.remove("selecionado");
     elemento.classList.add("selecionado");
 }
 
+function selecionarVisibilidade(elemento){
+    const selecionado = document.querySelector(".selecionadoVisibilidade");
+    selecionado.classList.remove("selecionadoVisibilidade");
+    elemento.classList.add("selecionadoVisibilidade");
+}
+
 function enviarMensagem(){
     const input = document.querySelector(".digitar input");
+    let tipo = "message"
     if (input.value != ""){
         const usuarioEscolhido = document.querySelector(".selecionado :nth-child(2)");
         const mensagem =
@@ -181,10 +220,10 @@ function enviarMensagem(){
             from: nome.name,
             to: usuarioEscolhido.innerHTML,
 	        text: input.value,
-	        type: "message"
+	        type: tipo
         }
-
-        axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', mensagem).catch(atualizarPagina);
+        console.log(mensagem);
+        //axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', mensagem).catch(atualizarPagina);
     }
 }
 

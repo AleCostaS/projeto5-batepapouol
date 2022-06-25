@@ -159,6 +159,7 @@ input {
 }
 
 .menulateral {
+    height: 2000px;
     overflow: auto;
 }
 
