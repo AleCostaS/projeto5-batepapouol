@@ -66,7 +66,9 @@ function perdeuConexao(erro){
 
 function menuLateral(){
     const menu = document.querySelector(".menu");
-    menu.classList.add("visivel");
+    menu.classList.remove("escondida");
+    setTimeout(function(){menu.classList.add("visivel");}, 10);
+    
 }
 
 function renderizarUsuarios(resposta){
@@ -104,6 +106,7 @@ function renderizarUsuarios(resposta){
         <div class="nomeUsuarios">Reservadamente</div>
         <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
     </div>`
+
 }
 
 function atualizarStatus(){ 
@@ -130,11 +133,33 @@ function voltar(){
     const menu = document.querySelector(".menu");
     menu.classList.remove("visivel");
     menu.classList.add("invisivel");
-    setTimeout(function() { menu.classList.remove("invisivel"); }, 1000);
+    setTimeout(escondendoMenuLateral, 1000);
 }
 
+function escondendoMenuLateral() { 
+    const menu = document.querySelector(".menu");
+    menu.classList.add("escondida");
+    menu.classList.remove("invisivel");
+     
+}
 function selecionarUsuario(elemento){
     const selecionado = document.querySelector(".selecionado");
     selecionado.classList.remove("selecionado");
     elemento.classList.add("selecionado");
+}
+
+function enviarMensagem(){
+    const input = document.querySelector(".digitar input");
+    if (input.value != ""){
+        const usuarioEscolhido = document.querySelector(".selecionado :nth-child(2)");
+        const mensagem =
+        {
+            from: nome.name,
+            to: usuarioEscolhido.innerHTML,
+	        text: input.value,
+	        type: "message"
+        }
+
+        axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', mensagem);
+    }
 }

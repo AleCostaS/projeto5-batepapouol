@@ -159,7 +159,6 @@ input {
 }
 
 .menulateral {
-    display: block;
     overflow: auto;
 }
 
@@ -169,7 +168,7 @@ input {
     height: 100%;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.6);
-    transition: background-color 2s;
+    transition: all 2s;
 }
 
 .invisivel {
@@ -177,7 +176,7 @@ input {
     height: 100%;
     opacity: 0;
     background-color: rgba(0, 0, 0, 0);
-    transition: background-color 2s;
+    transition: all 2s;
 }
 
 .invisivel .menulateral{
@@ -186,7 +185,7 @@ input {
     right:  0;
     position: absolute;
     transform:  translate(414px, 0);
-    transition: transform 2s;
+    transition: all 2s;
 }
 
 .visivel .menulateral{
@@ -196,7 +195,7 @@ input {
     right:  -414px;
     position: absolute;
     transform:  translate(-414px, 0);
-    transition: transform 2s;
+    transition: all 2s;
 }
 
 p  {
