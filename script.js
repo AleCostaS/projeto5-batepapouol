@@ -27,11 +27,11 @@ function renderizarMensagens(resposta){
         
         if (resposta.data[i].type == "status"){
             filha.classList.add("system")
-        } else if (resposta.data[i].type == "private_message"){
+        } else if (resposta.data[i].type == "private_message" && resposta.data[i].to == nome){
             filha.classList.add("private")
-            name.innerHTML += ` reservadamente para ${resposta.data[i].to}:`
+            name.innerHTML += ` reservadamente para <strong>${resposta.data[i].to}</strong>:`
         } else {
-            name.innerHTML += ` para ${resposta.data[i].to}:`
+            name.innerHTML += ` para <strong>${resposta.data[i].to}</strong>:`
         }
     }
 
@@ -71,54 +71,70 @@ function menuLateral(){
 
 function renderizarUsuarios(resposta){
     const menuLateral = document.querySelector(".menulateral")
+    let usuarioEscolhido = document.querySelector(".selecionado :nth-child(2)");
+    
     menuLateral.innerHTML = `
     <p><strong>Escolha um contato para enviar mensagem:</strong></p>
-    <div class="usuarios">
+    <div class="usuarios selecionado" onclick="selecionarUsuario(this)">
         <div class="icone"><ion-icon name="people"></ion-icon> </div>
-        <div class="nomeUsuarios selecionado">Todos</div>
-        <div class="escolhido"><ion-icon class name="checkmark-outline"></ion-icon></div>
+        <div class="nomeUsuarios">Todos</div>
+        <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
     </div>
     `
 
     for (let i = 1; i < (resposta.data).length; i++){
         menuLateral.innerHTML += `
-        <div class="usuarios">
+        <div class="usuarios" onclick="selecionarUsuario(this)">
             <div class="icone"><ion-icon name="person-circle-outline"></ion-icon> </div>
             <div class="nomeUsuarios">${resposta.data[i].name}</div>
+            <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
         </div>
         `
     }
 
     menuLateral.innerHTML += `
     <p><strong>Escolha a visibilidade:</strong></p>
-    <div class="usuarios">
+    <div class="visibilidade selecionadoVisibilidade">
         <div class="icone"><ion-icon name="lock-open"></ion-icon> </div>
         <div class="nomeUsuarios">Público</div>
+        <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
     </div>
-    <div class="usuarios">
+    <div class="visibilidade">
         <div class="icone"><ion-icon name="lock-closed"></ion-icon> </div>
         <div class="nomeUsuarios">Reservadamente</div>
-    </div>
-    `
+        <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
+    </div>`
 }
 
-function atualizarStatus(nome){ 
+function atualizarStatus(){ 
     if (nome != ""){
          axios.post('https://mock-api.driven.com.br/api/v6/uol/status', nome).catch(perdeuConexao); 
     }
 }
 
-setInterval(atualizarStatus(nome) , 5000);
+setInterval(atualizarStatus , 5000);
 
-function atualizandoUsuarios(){ 
+function atualizandoUsuarios(){
     usuarios = axios.get('https://mock-api.driven.com.br/api/v6/uol/participants').then(renderizarUsuarios);
 }
 
-setInterval( atualizandoUsuarios, 10000);
+setInterval(atualizandoUsuarios, 2000);
+
+function atualizandoMensagens(){
+    resposta = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages').then(renderizarMensagens).catch(retornarErro);
+}
+
+setInterval(atualizandoMensagens, 3000);
 
 function voltar(){
     const menu = document.querySelector(".menu");
     menu.classList.remove("visivel");
     menu.classList.add("invisivel");
     setTimeout(function() { menu.classList.remove("invisivel"); }, 1000);
+}
+
+function selecionarUsuario(elemento){
+    const selecionado = document.querySelector(".selecionado");
+    selecionado.classList.remove("selecionado");
+    elemento.classList.add("selecionado");
 }

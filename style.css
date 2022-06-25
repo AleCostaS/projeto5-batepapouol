@@ -169,7 +169,7 @@ input {
     height: 100%;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0.6);
-    transition: all 2s;
+    transition: background-color 2s;
 }
 
 .invisivel {
@@ -177,7 +177,7 @@ input {
     height: 100%;
     opacity: 0;
     background-color: rgba(0, 0, 0, 0);
-    transition: all 2s;
+    transition: background-color 2s;
 }
 
 .invisivel .menulateral{
@@ -186,7 +186,7 @@ input {
     right:  0;
     position: absolute;
     transform:  translate(414px, 0);
-    transition: all 2s;
+    transition: transform 2s;
 }
 
 .visivel .menulateral{
@@ -196,7 +196,7 @@ input {
     right:  -414px;
     position: absolute;
     transform:  translate(-414px, 0);
-    transition: all 2s;
+    transition: transform 2s;
 }
 
 p  {
@@ -208,10 +208,12 @@ p  {
     align-items: center;
 }
 
+.visibilidade,
 .usuarios {
     display: flex;
     align-items: center;
     flex-direction: row;
+    position: relative;
 }
 
 .icone {
@@ -224,3 +226,18 @@ p  {
     font-size: 24px;
 }
 
+.selecionadoVisibilidade .escolhido,
+.selecionado .escolhido {
+    opacity: 100%;
+}
+
+.escolhido {
+    color: #28BB25;
+    font-size: 32px;
+    opacity: 0;
+    
+    z-index: 3;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
