@@ -74,24 +74,48 @@ function menuLateral(){
 function renderizarUsuarios(resposta){
     const menuLateral = document.querySelector(".menulateral")
     let usuarioEscolhido = document.querySelector(".selecionado :nth-child(2)");
-    
-    menuLateral.innerHTML = `
-    <p><strong>Escolha um contato para enviar mensagem:</strong></p>
-    <div class="usuarios selecionado" onclick="selecionarUsuario(this)">
-        <div class="icone"><ion-icon name="people"></ion-icon> </div>
-        <div class="nomeUsuarios">Todos</div>
-        <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
-    </div>
-    `
+
+    if (usuarioEscolhido == null){ 
+        menuLateral.innerHTML = `
+        <p><strong>Escolha um contato para enviar mensagem:</strong></p>
+        <div class="usuarios escolhido" onclick="selecionarUsuario(this)">
+            <div class="icone"><ion-icon name="people"></ion-icon> </div>
+            <div class="nomeUsuarios">Todos</div>
+            <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
+        </div>`
+        usuarioEscolhido = document.querySelector(".usuarios");
+        usuarioEscolhido.classList.add("selecionado")
+    } else {
+        menuLateral.innerHTML = `
+        <p><strong>Escolha um contato para enviar mensagem:</strong></p>
+        <div class="usuarios" onclick="selecionarUsuario(this)">
+            <div class="icone"><ion-icon name="people"></ion-icon> </div>
+            <div class="nomeUsuarios">Todos</div>
+            <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
+        </div>`
+    }
 
     for (let i = 1; i < (resposta.data).length; i++){
-        menuLateral.innerHTML += `
-        <div class="usuarios" onclick="selecionarUsuario(this)">
-            <div class="icone"><ion-icon name="person-circle-outline"></ion-icon> </div>
-            <div class="nomeUsuarios">${resposta.data[i].name}</div>
-            <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
-        </div>
-        `
+        if (usuarioEscolhido != null && usuarioEscolhido.innerHTML == resposta.data[i].name){
+            menuLateral.innerHTML += `
+            <div class="usuarios selecionado" onclick="selecionarUsuario(this)">
+                <div class="icone"><ion-icon name="person-circle-outline"></ion-icon> </div>
+                <div class="nomeUsuarios">${resposta.data[i].name}</div>
+                <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
+            </div>`
+            usuarioEscolhido = null;
+        } else if ((i == (resposta.data).length - 1) && (usuarioEscolhido != null)){
+            usuarioEscolhido = null;
+            const todos = document.querySelector(".usuarios");
+            todos.classList.add("selecionado");
+        } else {
+            menuLateral.innerHTML += `
+            <div class="usuarios" onclick="selecionarUsuario(this)">
+                <div class="icone"><ion-icon name="person-circle-outline"></ion-icon> </div>
+                <div class="nomeUsuarios">${resposta.data[i].name}</div>
+                <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
+            </div>`
+        }
     }
 
     menuLateral.innerHTML += `
@@ -160,6 +184,10 @@ function enviarMensagem(){
 	        type: "message"
         }
 
-        axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', mensagem);
+        axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', mensagem).catch(atualizarPagina);
     }
+}
+
+function atualizarPagina(){
+    window.location.reload()
 }
