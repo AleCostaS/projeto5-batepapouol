@@ -27,7 +27,7 @@ function renderizarMensagens(resposta){
         
         if (resposta.data[i].type == "status"){
             filha.classList.add("system")
-        } else if (resposta.data[i].type == "private_message" && resposta.data[i].to == nome){
+        } else if (resposta.data[i].type == "private_message" && (resposta.data[i].to == nome.name || resposta.data[i].from == nome.name)){
             filha.classList.add("private")
             name.innerHTML += ` reservadamente para <strong>${resposta.data[i].to}</strong>:`
         } else {
@@ -75,7 +75,6 @@ function renderizarUsuarios(resposta){
     const menuLateral = document.querySelector(".menulateral");
     let usuarioEscolhido = document.querySelector(".selecionado :nth-child(2)");
     let visibilidadeEscolhida = document.querySelector(".selecionadoVisibilidade :nth-child(2)");
-    console.log(visibilidadeEscolhida)
     if (usuarioEscolhido == null){ 
         menuLateral.innerHTML = `
         <p><strong>Escolha um contato para enviar mensagem:</strong></p>
@@ -176,13 +175,13 @@ function atualizandoUsuarios(){
     usuarios = axios.get('https://mock-api.driven.com.br/api/v6/uol/participants').then(renderizarUsuarios);
 }
 
-setInterval(atualizandoUsuarios, 2000);
+setInterval(atualizandoUsuarios, 10000);
 
 function atualizandoMensagens(){
     resposta = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages').then(renderizarMensagens).catch(retornarErro);
 }
 
-setInterval(atualizandoMensagens, 3000);
+setInterval(atualizandoMensagens, 10000);
 
 function voltar(){
     const menu = document.querySelector(".menu");
@@ -211,10 +210,17 @@ function selecionarVisibilidade(elemento){
 }
 
 function enviarMensagem(){
-    const input = document.querySelector(".digitar input");
+    let input = document.querySelector(".digitar input");
     let tipo = "message"
     if (input.value != ""){
         const usuarioEscolhido = document.querySelector(".selecionado :nth-child(2)");
+        const visibilidadeEscolhida = document.querySelector(".selecionadoVisibilidade :nth-child(2)")
+        if (visibilidadeEscolhida.innerHTML != "Público"){
+            tipo = "private_message";
+            console.log("aqui")
+        } else {
+            tipo = "message"
+        }
         const mensagem =
         {
             from: nome.name,
@@ -222,10 +228,20 @@ function enviarMensagem(){
 	        text: input.value,
 	        type: tipo
         }
-        console.log(mensagem);
-        //axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', mensagem).catch(atualizarPagina);
+        input.value = "";
+        axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', mensagem).catch(atualizarPagina);
+        
     }
 }
+
+function enviarEnter(evt) {
+    evt = evt || window.event;
+    var charCode = evt.keyCode || evt.which;
+    if (charCode == '13'){
+        enviarMensagem();
+    }
+
+};
 
 function atualizarPagina(){
     window.location.reload()
