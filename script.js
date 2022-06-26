@@ -83,7 +83,7 @@ function renderizarUsuarios(resposta){
     if (usuarioEscolhido == null){ 
         menuLateral.innerHTML = `
         <p><strong>Escolha um contato para enviar mensagem:</strong></p>
-        <div class="usuarios escolhido" onclick="selecionarUsuario(this)">
+        <div data-identifier="participant" class="usuarios escolhido" onclick="selecionarUsuario(this)">
             <div class="icone"><ion-icon name="people"></ion-icon> </div>
             <div class="nomeUsuarios">Todos</div>
             <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
@@ -103,7 +103,7 @@ function renderizarUsuarios(resposta){
     for (let i = 1; i < (resposta.data).length; i++){
         if (usuarioEscolhido != null && usuarioEscolhido.innerHTML == resposta.data[i].name){
             menuLateral.innerHTML += `
-            <div class="usuarios selecionado" onclick="selecionarUsuario(this)">
+            <div data-identifier="participant" class="usuarios selecionado" onclick="selecionarUsuario(this)">
                 <div class="icone"><ion-icon name="person-circle-outline"></ion-icon> </div>
                 <div class="nomeUsuarios">${resposta.data[i].name}</div>
                 <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
@@ -115,7 +115,7 @@ function renderizarUsuarios(resposta){
             todos.classList.add("selecionado");
         } else {
             menuLateral.innerHTML += `
-            <div class="usuarios" onclick="selecionarUsuario(this)">
+            <div data-identifier="participant" class="usuarios" onclick="selecionarUsuario(this)">
                 <div class="icone"><ion-icon name="person-circle-outline"></ion-icon> </div>
                 <div class="nomeUsuarios">${resposta.data[i].name}</div>
                 <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
@@ -140,12 +140,12 @@ function renderizarUsuarios(resposta){
         if (visibilidadeEscolhida.innerHTML == "Público"){
             menuLateral.innerHTML += `
             <p><strong>Escolha a visibilidade:</strong></p>
-            <div class="visibilidade selecionadoVisibilidade" onclick="selecionarVisibilidade(this)">
+            <div data-identifier="visibility" class="visibilidade selecionadoVisibilidade" onclick="selecionarVisibilidade(this)">
                 <div class="icone"><ion-icon name="lock-open"></ion-icon> </div>
                 <div class="nomeUsuarios">Público</div>
                 <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
             </div>
-            <div class="visibilidade" onclick="selecionarVisibilidade(this)">
+            <div data-identifier="visibility" class="visibilidade" onclick="selecionarVisibilidade(this)">
                 <div class="icone"><ion-icon name="lock-closed"></ion-icon> </div>
                 <div class="nomeUsuarios">Reservadamente</div>
                 <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
@@ -153,18 +153,17 @@ function renderizarUsuarios(resposta){
         } else {
             menuLateral.innerHTML += `
             <p><strong>Escolha a visibilidade:</strong></p>
-            <div class="visibilidade" onclick="selecionarVisibilidade(this)">
+            <div data-identifier="visibility" class="visibilidade" onclick="selecionarVisibilidade(this)">
                 <div class="icone"><ion-icon name="lock-open"></ion-icon> </div>
                 <div class="nomeUsuarios">Público</div>
                 <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
             </div>
-            <div class="visibilidade  selecionadoVisibilidade" onclick="selecionarVisibilidade(this)">
+            <div data-identifier="visibility" class="visibilidade  selecionadoVisibilidade" onclick="selecionarVisibilidade(this)">
                 <div class="icone"><ion-icon name="lock-closed"></ion-icon> </div>
                 <div class="nomeUsuarios">Reservadamente</div>
                 <ion-icon class="escolhido" name="checkmark-outline"></ion-icon>
             </div>`
         }
-       
     }
 };
 
@@ -186,7 +185,20 @@ function atualizandoMensagens(){
     resposta = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages').then(renderizarMensagens).catch(retornarErro);
 };
 
-setInterval(atualizandoMensagens, 10000);
+setInterval(atualizandoMensagens, 5000);
+
+function inputPlaceholder(){
+    const usuarioEscolhido = document.querySelector(".selecionado :nth-child(2)");
+    const visibilidadeEscolhida = document.querySelector(".selecionadoVisibilidade :nth-child(2)");
+    
+    if (usuarioEscolhido != null && usuarioEscolhido.innerHTML != "Todos"){
+        const input = document.querySelector(".digitar input");
+        input.placeholder = "Escreva aqui...\n Enviando para "+ usuarioEscolhido.innerHTML;
+        if (visibilidadeEscolhida.innerHTML != "Público"){
+            input.placeholder += " (reservadamente)"
+        }
+    }
+}
 
 function voltar(){
     const menu = document.querySelector(".menu");
@@ -205,12 +217,14 @@ function selecionarUsuario(elemento){
     const selecionado = document.querySelector(".selecionado");
     selecionado.classList.remove("selecionado");
     elemento.classList.add("selecionado");
+    inputPlaceholder();
 };
 
 function selecionarVisibilidade(elemento){
     const selecionado = document.querySelector(".selecionadoVisibilidade");
     selecionado.classList.remove("selecionadoVisibilidade");
     elemento.classList.add("selecionadoVisibilidade");
+    inputPlaceholder();
 };
 
 function enviarMensagem(){
