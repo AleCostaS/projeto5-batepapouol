@@ -1,11 +1,18 @@
 let resposta = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages').then(renderizarMensagens).catch(retornarErro);
 let usuarios = axios.get('https://mock-api.driven.com.br/api/v6/uol/participants').then(renderizarUsuarios);
 let nome = "";
+const tempo = Math.random() * (5000 - 300) + 300;
 
 function retornarErro(erro){
     console.log("Status code: " + erro.response.status);
 	console.log("Mensagem de erro: " + erro.response.data);
-}
+};
+
+function retornarErroNome(erro){
+    console.log("Status code: " + erro.response.status);
+	console.log("Mensagem de erro: " + erro.response.data);
+    window.location.reload();
+};
 
 function renderizarMensagens(resposta){
     const ul = document.querySelector(".conteudo");
@@ -37,12 +44,11 @@ function renderizarMensagens(resposta){
 
     const ultimaMensagem = document.querySelector(".conteudo :nth-child("+((resposta.data).length)+")");
     ultimaMensagem.scrollIntoView();
-}
+};
 
 function mudarPagina(){
-    const inicial = document.querySelector(".inicial");
-    inicial.classList.add("escondida");
-}
+    
+};
 
 function digitandoNome(){
     const input = document.querySelector(".inicial input");
@@ -52,24 +58,23 @@ function digitandoNome(){
                 name: input.value
             }
 
-        axios.post("https://mock-api.driven.com.br/api/v6/uol/participants" , nome).then(mudarPagina).catch(retornarErro);
+        axios.post("https://mock-api.driven.com.br/api/v6/uol/participants" , nome).catch(retornarErroNome);
         axios.get('https://mock-api.driven.com.br/api/v6/uol/participants', nome).then(renderizarUsuarios);
-        return nome;
+        setTimeout(carregarPagina(), tempo);
     }
-}
+};
 
 function perdeuConexao(erro){
     if (erro == 400){
-        window.location.reload
+        window.location.reload();
     }
-}
+};
 
 function menuLateral(){
     const menu = document.querySelector(".menu");
     menu.classList.remove("escondida");
     setTimeout(function(){menu.classList.add("visivel");}, 10);
-    
-}
+};
 
 function renderizarUsuarios(resposta){
     const menuLateral = document.querySelector(".menulateral");
@@ -161,25 +166,25 @@ function renderizarUsuarios(resposta){
         }
        
     }
-}
+};
 
 function atualizarStatus(){ 
     if (nome != ""){
          axios.post('https://mock-api.driven.com.br/api/v6/uol/status', nome).catch(perdeuConexao); 
     }
-}
+};
 
 setInterval(atualizarStatus , 5000);
 
 function atualizandoUsuarios(){
-    usuarios = axios.get('https://mock-api.driven.com.br/api/v6/uol/participants').then(renderizarUsuarios);
-}
+    usuarios = axios.get('https://mock-api.driven.com.br/api/v6/uol/participants').then(renderizarUsuarios).catch(retornarErroNome);
+};
 
 setInterval(atualizandoUsuarios, 10000);
 
 function atualizandoMensagens(){
     resposta = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages').then(renderizarMensagens).catch(retornarErro);
-}
+};
 
 setInterval(atualizandoMensagens, 10000);
 
@@ -188,36 +193,34 @@ function voltar(){
     menu.classList.remove("visivel");
     menu.classList.add("invisivel");
     setTimeout(escondendoMenuLateral, 1000);
-}
+};
 
 function escondendoMenuLateral() { 
     const menu = document.querySelector(".menu");
     menu.classList.add("escondida");
-    menu.classList.remove("invisivel");
-     
-}
+    menu.classList.remove("invisivel");  
+};
 
 function selecionarUsuario(elemento){
     const selecionado = document.querySelector(".selecionado");
     selecionado.classList.remove("selecionado");
     elemento.classList.add("selecionado");
-}
+};
 
 function selecionarVisibilidade(elemento){
     const selecionado = document.querySelector(".selecionadoVisibilidade");
     selecionado.classList.remove("selecionadoVisibilidade");
     elemento.classList.add("selecionadoVisibilidade");
-}
+};
 
 function enviarMensagem(){
     let input = document.querySelector(".digitar input");
-    let tipo = "message"
+    let tipo = "message";
     if (input.value != ""){
         const usuarioEscolhido = document.querySelector(".selecionado :nth-child(2)");
         const visibilidadeEscolhida = document.querySelector(".selecionadoVisibilidade :nth-child(2)")
         if (visibilidadeEscolhida.innerHTML != "Público"){
             tipo = "private_message";
-            console.log("aqui")
         } else {
             tipo = "message"
         }
@@ -232,7 +235,7 @@ function enviarMensagem(){
         axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', mensagem).catch(atualizarPagina);
         
     }
-}
+};
 
 function enviarEnter(evt) {
     evt = evt || window.event;
@@ -244,5 +247,12 @@ function enviarEnter(evt) {
 };
 
 function atualizarPagina(){
-    window.location.reload()
+    window.location.reload();
+};
+
+function carregarPagina(){
+    const inicial = document.querySelector(".inicial");
+    inicial.classList.remove("nomeando");
+    inicial.classList.add("carregando");
+    setTimeout(function(){inicial.classList.add("escondida");}, tempo)
 }

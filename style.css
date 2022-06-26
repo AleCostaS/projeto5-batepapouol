@@ -241,3 +241,26 @@ p  {
     top: 15px;
     right: 20px;
 }
+
+.nomeando :nth-child(4),
+.nomeando :nth-child(5){
+    display: none;
+}
+
+.carregando :nth-child(2),
+.carregando :nth-child(3) {
+    display: none;
+}
+
+.carregando :nth-child(4) {
+    display: block;
+    width: 162px;
+}
+
+.carregando :nth-child(5) {
+    display: block;
+}
+
+.erro {
+    color: lightcoral;
+}
